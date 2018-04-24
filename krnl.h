@@ -725,15 +725,16 @@ int k_sleep (int time);
 
 /**
    creates a task and put it in the active Q
-   @param[in] pTask pointer to function for code ( void task(void) ...)
+   @param[in] pTask pointer to function for code ( void task(void *arg) ...)
    @param[in] prio Priority 1: highest (QHEAD_PRIO-1): lowest
    @param[in] pStk Reference to data area to be used as stak
    @param[in] stkSize size of data area(in bytes) to be used for stak
+   @param[in] arg Argument passed to pTask
    @return: pointer to task handle or NULL if no success
    @remark only to be called before start of KRNL but after k_init
  */
-struct k_t *k_crt_task (void (*pTask)(void), char prio, char *pStk,
-                        int stkSize);
+struct k_t *k_crt_task (void (*pTask)(void*), char prio, char *pStk,
+                        int stkSize, void *arg);
 
 /**
    change priority of calling task)

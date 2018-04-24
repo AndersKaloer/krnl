@@ -429,7 +429,7 @@ void jumper()
 }
     #endif
 
-struct k_t *k_crt_task (void (*pTask)(void), char prio, char *pStk, int stkSize)
+struct k_t *k_crt_task (void (*pTask)(void*), char prio, char *pStk, int stkSize, void *arg)
 {
         struct k_t *pT;
         int i;
@@ -490,7 +490,15 @@ struct k_t *k_crt_task (void (*pTask)(void), char prio, char *pStk, int stkSize)
         *(s--) = EIND;     // best guess 0x3c
     #endif
 
-        for (i = 0; i < 30; i++)     //r2-r31 = 30 regs
+        for (i = 0; i < 22; i++)     //r2-r23 = 22 regs
+        {
+                *(s--) = 0x00;
+        }
+
+        *(s--) = lo8 (arg);     // Single 16 bit function argument
+        *(s--) = hi8 (arg);     // is in registers 24,25
+
+        for (i = 0; i < 6; i++)     //r26-r31 = 6 regs
         {
                 *(s--) = 0x00;
         }
